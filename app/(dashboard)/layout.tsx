@@ -1,4 +1,3 @@
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { createClient } from "@/lib/supabase/server";
 import { cookies } from "next/headers";
@@ -21,13 +20,9 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <DashboardHeader email={user.email ?? ""} />
-
-      <div className="flex min-h-[calc(100vh-64px)] ">
-        <DashboardSidebar />
-        <main className="flex-1 p-6">{children}</main>
-      </div>
+    <div className="flex h-screen overflow-hidden bg-gray-50">
+      <DashboardSidebar email={user.email ?? ""} />
+      <main className="flex-1">{children}</main>
     </div>
   );
 }

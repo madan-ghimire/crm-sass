@@ -1,3 +1,5 @@
+import { PageLayout } from "@/layouts/page-layout";
+
 interface Props {
   searchParams: Promise<{
     search?: string;
@@ -11,8 +13,8 @@ export default async function Contacts({ searchParams }: Props) {
   console.log("search:", search);
   console.log("status:", status);
   return (
-    <div>
+    <PageLayout title="Contact page">
       <h2>This my contacts page</h2>
-    </div>
+    </PageLayout>
   );
 }

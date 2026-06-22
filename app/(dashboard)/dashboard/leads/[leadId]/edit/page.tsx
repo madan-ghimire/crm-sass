@@ -91,6 +91,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { EditLeadForm } from "@/components/leads/edit-lead-form";
+import { PageLayout } from "@/layouts/page-layout";
 
 type Props = {
   params: Promise<{
@@ -111,11 +112,29 @@ export default async function EditLeadPage({ params }: Props) {
     notFound();
   }
 
-  return (
-    <div className="max-w-2xl space-y-6">
-      <h1 className="text-2xl font-bold">Edit Lead</h1>
+  console.log("check lead here", lead);
 
+  return (
+    // <div className="max-w-2xl space-y-6">
+    //   <h1 className="text-2xl font-bold">Edit Lead</h1>
+
+    //   <EditLeadForm lead={lead} />
+    // </div>
+
+    <PageLayout
+      breadcrumbs={[
+        { label: "Dashboard", href: "/dashboard" },
+        {
+          label: "Leads",
+          href: "/dashboard/leads",
+        },
+        {
+          label: `${lead.firstName} ${lead.lastName}`,
+        },
+      ]}
+      // title="Edit Lead"
+    >
       <EditLeadForm lead={lead} />
-    </div>
+    </PageLayout>
   );
 }
