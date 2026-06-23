@@ -79,6 +79,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { CreateLeadButton } from "./create-lead-button";
+import { PageLayout } from "@/layouts/page-layout";
 
 type Props = {
   organizationId?: string;
@@ -100,58 +101,60 @@ export function LeadForm({ organizationId }: Props) {
   }
 
   return (
-    <form action={handleSubmit} className="space-y-4 rounded-xl border p-6">
-      <input type="hidden" name="organizationId" value={organizationId} />
+    <PageLayout title="Create Lead">
+      <form action={handleSubmit} className="space-y-4 rounded-xl border p-6">
+        <input type="hidden" name="organizationId" value={organizationId} />
 
-      <input
-        name="firstName"
-        placeholder="First Name"
-        className="w-full rounded-lg border p-3"
-        required
-      />
+        <input
+          name="firstName"
+          placeholder="First Name"
+          className="w-full rounded-lg border p-3"
+          required
+        />
 
-      <input
-        name="lastName"
-        placeholder="Last Name"
-        className="w-full rounded-lg border p-3"
-        required
-      />
+        <input
+          name="lastName"
+          placeholder="Last Name"
+          className="w-full rounded-lg border p-3"
+          required
+        />
 
-      <input
-        name="email"
-        placeholder="Email"
-        className="w-full rounded-lg border p-3"
-        required
-        type="email"
-      />
+        <input
+          name="email"
+          placeholder="Email"
+          className="w-full rounded-lg border p-3"
+          required
+          type="email"
+        />
 
-      <input
-        name="phone"
-        placeholder="Phone"
-        className="w-full rounded-lg border p-3"
-        type="text"
-        required
-      />
+        <input
+          name="phone"
+          placeholder="Phone"
+          className="w-full rounded-lg border p-3"
+          type="text"
+          required
+        />
 
-      <input
-        name="company"
-        placeholder="Company"
-        className="w-full rounded-lg border p-3"
-        required
-      />
+        <input
+          name="company"
+          placeholder="Company"
+          className="w-full rounded-lg border p-3"
+          required
+        />
 
-      <textarea
-        name="notes"
-        rows={5}
-        placeholder="Notes"
-        className="w-full rounded-lg border p-3"
-      />
+        <textarea
+          name="notes"
+          rows={5}
+          placeholder="Notes"
+          className="w-full rounded-lg border p-3"
+        />
 
-      <div className="flex gap-3 items-center">
-        {/* <Button type="submit">Create Lead</Button> */}
-        <CreateLeadButton />
-        <Button onClick={() => router.back()}>Back</Button>
-      </div>
-    </form>
+        <div className="flex gap-3 items-center">
+          {/* <Button type="submit">Create Lead</Button> */}
+          <CreateLeadButton />
+          <Button onClick={() => router.back()}>Back</Button>
+        </div>
+      </form>
+    </PageLayout>
   );
 }

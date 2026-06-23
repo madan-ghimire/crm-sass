@@ -9,6 +9,7 @@ import { LeadButtons } from "./lead-buttons";
 
 export async function LeadList({ searchParams }: LeadSearchParams) {
   const { search, status } = await searchParams;
+
   const organizationId = "512baa35-9b15-4740-8e38-4ecd6dc6ec7a";
 
   console.log("check search params here: you go iii ", search);
@@ -78,27 +79,55 @@ export async function LeadList({ searchParams }: LeadSearchParams) {
                 </tr>
               ) : (
                 leads.map((lead) => (
-                  <tr key={lead.id}>
+                  <tr
+                    key={lead.id}
+                    className="hover:bg-muted/50 transition-colors"
+                  >
                     <td className="px-4 py-3">
-                      {lead.firstName || lead.lastName
-                        ? `${lead.firstName} ${lead.lastName}`
-                        : "-"}
+                      <Link
+                        href={`/dashboard/leads/${lead.id}`}
+                        className="block w-full h-full"
+                      >
+                        {lead.firstName || lead.lastName
+                          ? `${lead.firstName} ${lead.lastName}`
+                          : "-"}
+                      </Link>
                     </td>
-
-                    <td className="px-4 py-3">{lead.email || "-"}</td>
-
                     <td className="px-4 py-3">
-                      <span className="rounded-full border px-2 py-1 text-xs">
-                        {lead.status}
-                      </span>
+                      <Link
+                        href={`/dashboard/leads/${lead.id}`}
+                        className="block w-full h-full"
+                      >
+                        {lead.email || "-"}
+                      </Link>
                     </td>
-
-                    <td className="px-4 py-3">{lead.position || "-"}</td>
-
                     <td className="px-4 py-3">
-                      {new Date(lead.createdAt).toLocaleDateString()}
+                      <Link
+                        href={`/dashboard/leads/${lead.id}`}
+                        className="block w-full h-full"
+                      >
+                        <span className="rounded-full border px-2 py-1 text-xs">
+                          {lead.status}
+                        </span>
+                      </Link>
                     </td>
-
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/dashboard/leads/${lead.id}`}
+                        className="block w-full h-full"
+                      >
+                        {lead.position || "-"}
+                      </Link>
+                    </td>
+                    <td className="px-4 py-3">
+                      <Link
+                        href={`/dashboard/leads/${lead.id}`}
+                        className="block w-full h-full"
+                      >
+                        {new Date(lead.createdAt).toLocaleDateString()}
+                      </Link>
+                    </td>
+                    {/* Actions — no Link here */}
                     <td className="px-4 py-3">
                       <div className="flex justify-end gap-2">
                         <Link
@@ -107,7 +136,6 @@ export async function LeadList({ searchParams }: LeadSearchParams) {
                         >
                           Edit
                         </Link>
-
                         <DeleteLeadForm leadId={lead.id} />
                       </div>
                     </td>
