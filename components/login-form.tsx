@@ -35,7 +35,7 @@ export function LoginForm({
 
   const router = useRouter();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     setError(null);
@@ -52,7 +52,13 @@ export function LoginForm({
 
       router.push("/dashboard");
     } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "An error occurred while logging in";
+
       console.error("Login error:", error);
+      toast.error(errorMessage);
       setError(
         error instanceof Error
           ? error.message

@@ -5,14 +5,18 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Users,
-  BookUser,
+  Building2,
+  BriefcaseBusiness,
   CircleCheck,
+  Activity,
+  UserCog,
   Settings,
 } from "lucide-react";
 import { LogoutButton } from "../logout-button";
 
 type Props = {
   email: string;
+  organizationName: string;
 };
 
 const navItems = [
@@ -27,14 +31,34 @@ const navItems = [
     icon: Users,
   },
   {
-    href: "/dashboard/contacts",
-    label: "Contacts",
-    icon: BookUser,
+    href: "/dashboard/companies",
+    label: "Companies",
+    icon: Building2,
+  },
+  {
+    href: "/dashboard/deals",
+    label: "Deals",
+    icon: BriefcaseBusiness,
   },
   {
     href: "/dashboard/tasks",
     label: "Tasks",
     icon: CircleCheck,
+  },
+  {
+    href: "/dashboard/activities",
+    label: "Activities",
+    icon: Activity,
+  },
+  {
+    href: "/dashboard/team",
+    label: "Team",
+    icon: UserCog,
+  },
+  {
+    href: "/dashboard/organization",
+    label: "Organization",
+    icon: Building2,
   },
   {
     href: "/dashboard/settings",
@@ -43,14 +67,14 @@ const navItems = [
   },
 ];
 
-export function DashboardSidebar({ email }: Props) {
+export function DashboardSidebar({ email, organizationName }: Props) {
   const pathname = usePathname();
   const initials = email.split("@")[0].slice(0, 2).toUpperCase();
   return (
     <aside className="flex h-full w-56 shrink-0 flex-col border-r bg-white">
       <div className="border-b px-4 py-5 ml-4">
-        <span className="text-base font-medium">CRM</span>
-        <p className="text-[11px">Workspace</p>
+        <span className="text-base font-medium"> {organizationName}</span>
+        {/* <p className="text-[11px">Workspace</p> */}
       </div>
 
       <nav className="flex-1 overflow-y-auto p-4">

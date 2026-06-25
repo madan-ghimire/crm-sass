@@ -1,17 +1,25 @@
 "use server";
 
+import { getCurrentUser } from "@/lib/auth/get-current-user";
+import { getPrismaErrorMessage } from "@/lib/errors/prisma-error";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-// import { redirect } from "next/navigation";
 
 export async function createLead(formData: FormData) {
   try {
+    const currentUser = await getCurrentUser();
+
+    if (!currentUser) {
+      return {
+        success: false,
+        message: "Unauthorized",
+      };
+    }
+
     const firstName = formData.get("firstName") as string;
     const lastName = formData.get("lastName") as string;
     const email = formData.get("email") as string;
     const notes = formData.get("notes") as string;
-
-    const organizationId = formData.get("organizationId") as string;
 
     await prisma.lead.create({
       data: {
@@ -19,22 +27,25 @@ export async function createLead(formData: FormData) {
         lastName,
         email,
         notes,
-        organizationId,
+        organizationId: currentUser.organizationId,
+        assignedToId: currentUser.id,
       },
     });
 
     revalidatePath("/dashboard/leads");
-
-    // redirect("/dashboard/leads");
 
     return {
       success: true,
       message: "Lead created successfully",
     };
   } catch (error) {
+    console.log(
+      "check error thrown from prisma while creating new lead",
+      error,
+    );
     return {
       success: false,
-      message: "Failed to create lead",
+      message: getPrismaErrorMessage(error),
       error,
     };
   }

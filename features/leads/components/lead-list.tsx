@@ -6,16 +6,23 @@ import { NewLeadButton } from "@/components/leads/new-lead-button";
 import { LeadSearchParams } from "@/features/leads";
 import { PageLayout } from "@/layouts/page-layout";
 import { LeadButtons } from "./lead-buttons";
+import { getCurrentUser } from "@/lib/auth/get-current-user";
 
 export async function LeadList({ searchParams }: LeadSearchParams) {
-  const { search, status } = await searchParams;
+  const user = await getCurrentUser();
 
-  const organizationId = "512baa35-9b15-4740-8e38-4ecd6dc6ec7a";
+  console.log("check user here in leads", user);
+
+  if (!user) {
+    return null;
+  }
+
+  const { search, status } = await searchParams;
 
   console.log("check search params here: you go iii ", search);
 
   console.log("status here: ", status);
-  const leads = await getLeads(organizationId, search);
+  const leads = await getLeads(user.organizationId, search);
 
   console.log("check leads here", leads);
 

@@ -1,12 +1,14 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
+import { prisma } from "@/lib/prisma";
 
 // The client you created from the Server-Side Auth instructions
 // import { createClient } from '@/utils/supabase/server'
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);
+
   const code = searchParams.get("code");
   const cookieStore = await cookies();
 
@@ -22,6 +24,44 @@ export async function GET(request: Request) {
     const supabase = await createClient(cookieStore);
     const { error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error) {
+      // Sync supabase user -> Prisma
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (user) {
+        const existingUser = await prisma.user.findUnique({
+          where: {
+            id: user.id,
+          },
+        });
+
+        if (!existingUser) {
+          const organization = await prisma.organization.create({
+            data: {
+              name: user.user_metadata?.full_name
+                ? `${user.user_metadata.full_name}'s Workspace`
+                : `${user.email}'s Workspace`,
+            },
+          });
+
+          await prisma.user.create({
+            data: {
+              id: user.id,
+              email: user.email!,
+              username:
+                user.user_metadata?.user_name ??
+                user.user_metadata?.full_name
+                  ?.replace(/\s+/g, "")
+                  .toLowerCase() ??
+                user.email!.split("@")[0],
+              role: "OWNER",
+              organizationId: organization.id,
+            },
+          });
+        }
+      }
+
       const forwardedHost = request.headers.get("x-forwarded-host"); // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === "development";
       if (isLocalEnv) {

@@ -74,6 +74,7 @@
 
 "use client";
 
+import React, { useRef } from "react";
 import { createLead } from "@/actions/leads/create-lead";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -87,12 +88,22 @@ type Props = {
 
 export function LeadForm({ organizationId }: Props) {
   const router = useRouter();
+  const formRef = useRef<HTMLFormElement>(null);
 
-  async function handleSubmit(formData: FormData) {
+  async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    const formData = new FormData(e.currentTarget);
+
     const result = await createLead(formData);
+
+    console.log("check result here i am", result.success);
 
     if (result.success) {
       toast.success(result.message);
+      console.log(formRef.current);
+      formRef.current?.reset();
+
       router.push("/dashboard/leads");
       router.refresh();
     } else {
@@ -102,7 +113,11 @@ export function LeadForm({ organizationId }: Props) {
 
   return (
     <PageLayout title="Create Lead">
-      <form action={handleSubmit} className="space-y-4 rounded-xl border p-6">
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="space-y-4 rounded-xl border p-6"
+      >
         <input type="hidden" name="organizationId" value={organizationId} />
 
         <input

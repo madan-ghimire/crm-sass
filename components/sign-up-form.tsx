@@ -143,7 +143,8 @@ export function SignUpForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-
+  const [organizationName, setOrganizationName] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -165,6 +166,8 @@ export function SignUpForm({
     }
 
     const formData = new FormData();
+    formData.append("organizationName", organizationName);
+    formData.append("username", username);
     formData.append("email", email);
     formData.append("password", password);
 
@@ -188,6 +191,8 @@ export function SignUpForm({
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      setOrganizationName("");
+      setUsername("");
 
       setSuccessMessage(result.message);
       toast("Register successful", { position: "bottom-right" });
@@ -234,6 +239,21 @@ export function SignUpForm({
           </div>
 
           <form onSubmit={handleSignUp} className="space-y-4">
+            <div className="space-y-2">
+              <Input
+                placeholder="Organization Name"
+                value={organizationName}
+                onChange={(e) => setOrganizationName(e.target.value)}
+                required
+              />
+
+              <Input
+                placeholder="Username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </div>
             <div className="space-y-2">
               <Input
                 id="email"
