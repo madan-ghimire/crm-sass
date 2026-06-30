@@ -1,5 +1,3 @@
-// actions/leads/update-lead.ts
-
 "use server";
 
 import { prisma } from "@/lib/prisma";
